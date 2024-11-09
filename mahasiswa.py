@@ -1,16 +1,61 @@
 from list_24060124120013 import *
+from set_24060124120013 import *
 
 mahasiswa = [
-    ["24060124120013", "Muhamad Kemal Faza", "D", [70, 80, 90]],
-    ["24060124120014", "Siapa kek", "D", [60, 80, 50]],
-    ["24060124120013", "Entah", "B", [80, 90, 100]],
+    ["24060123130061", "Ananda Rachmawati Purwanto", "A", [90, 90, 90]],
+    # ["24060123130090", "Bramantyo Kunni Nurrisqi", "D", []],
+    # [
+    #     "24060123140152",
+    #     "Kayis Hilmi Farih",
+    #     "A",
+    #     [90, 70, 100],
+    # ],
+    # ["24060123140162", "Lalu Gilang Wirapati", "D", [100, 80, 90]],
+    # ["24060124120013", "Muhamad Kemal Faza", "D", [100, 90, 80]],
+    ["24060124110142", "Muchammad Yuda Tri Ananda", "A", []],
+    # ["24060124120016", "Quinta Aurabiansyah", "D", [70, 60, 70]],
+    ["24060124120018", "Putri Elizabeth Simanjuntak", "A", [70, 60, 60]],
 ]
 
 
+# Konstruktor
 def MakeMhs(nim, nama, kelas, nilai):
     return [nim, nama, kelas, nilai]
 
 
+def MakeSetMhs(mhs, L):
+    if IsEmpty(L):
+        return []
+    else:
+        if Nim(mhs) == Nim(FirstElmnt(L)):
+            return MakeSetMhs(mhs, Tail(L))
+        else:
+            return Konsi(mhs, L)
+
+
+# print(f"DATA AWAL MAHASISWA :")
+# print(
+#     MakeSet(
+#         [
+#             MakeMhs("24060123130061", "Ananda Rachmawati Purwanto", "A", [90, 90, 90]),
+#             MakeMhs("24060123130090", "Bramantyo Kunni Nurrisqi", "D", []),
+#             MakeMhs(
+#                 "24060123140152",
+#                 "Kayis Hilmi Farih",
+#                 "A",
+#                 [90, 70, 100],
+#             ),
+#             MakeMhs("24060123140162", "Lalu Gilang Wirapati", "D", [100, 80, 90]),
+#             MakeMhs("24060124120013", "Muhamad Kemal Faza", "D", [100, 90, 80]),
+#             MakeMhs("24060124110142", "Muchammad Yuda Tri Ananda", "A", []),
+#             MakeMhs("Quinta Aurabiansyah", "24060124120016", "D", [70, 60, 70]),
+#             MakeMhs("Putri Elizabeth Simanjuntak", "24060124120018", "A", [70, 60, 60]),
+#         ]
+#     ),
+# )
+
+
+# Selektor
 def Nim(mhs):
     return mhs[0]
 
@@ -27,20 +72,6 @@ def Nilai(mhs):
     return mhs[-1]
 
 
-def ListNilai(nilai, L):
-    return [L] + nilai
-
-
-def MakeSetMhs(mhs, L):
-    if IsEmpty(L):
-        return []
-    else:
-        if Nim(mhs) == Nim(FirstElmnt(L)):
-            return MakeSetMhs(mhs, Tail(L))
-        else:
-            return Konsi(mhs, L)
-
-
 def MhsLulus(S):
     if IsEmpty(S):
         return []
@@ -51,47 +82,62 @@ def MhsLulus(S):
             return MhsLulus(Tail(S))
 
 
-def Pemalas(C, S):
+def MhsEmptyQuiz(C, S):
     if IsEmpty(S):
         return []
     else:
         if Kelas(FirstElmnt(S)) == C and Nilai(FirstElmnt(S)) == []:
-            return Konso(FirstElmnt(S), Pemalas(C, Tail(S)))
+            return Konso(FirstElmnt(S), MhsEmptyQuiz(C, Tail(S)))
         else:
-            return Pemalas(C, Tail(S))
+            return MhsEmptyQuiz(C, Tail(S))
 
 
-def NilaiTertinggi(S):
+def NilaiTertinggiSemua(S):
     if IsOneElmnt(S):
-        return SumElmnt(Nilai(FirstElmnt(S)))
+        return MaxElmnt(Nilai(FirstElmnt(S)))
     else:
         if IsEmpty(Nilai(FirstElmnt(S))):
-            return NilaiTertinggi(Tail(S))
+            return NilaiTertinggiSemua(Tail(S))
         else:
-            return max2(SumElmnt(Nilai(FirstElmnt(S))), NilaiTertinggi(Tail(S)))
+            return max2(MaxElmnt(Nilai(FirstElmnt(S))), NilaiTertinggiSemua(Tail(S)))
 
 
-def MVP(C, S):
+def NilaiTertinggiPerKelas(C, S):
     if IsOneElmnt(S):
-        return FirstElmnt(S)
+        if not IsEmpty(Nilai(FirstElmnt(S))):
+            return MaxElmnt(Nilai(FirstElmnt(S)))
+        else:
+            return 0
+    else:
+        if IsEmpty(Nilai(FirstElmnt(S))) or Kelas(FirstElmnt(S)) != C:
+            return NilaiTertinggiPerKelas(C, Tail(S))
+        else:
+            return max2(
+                MaxElmnt(Nilai(FirstElmnt(S))), NilaiTertinggiPerKelas(C, Tail(S))
+            )
+
+
+def MhsNilaiTertinggi(C, S, HighScore):
+    if IsEmpty(S):
+        return []
     else:
         if IsEmpty(Nilai(FirstElmnt(S))) or C != Kelas(FirstElmnt(S)):
-            return MVP(C, Tail(S))
+            return MhsNilaiTertinggi(C, Tail(S), HighScore)
         else:
-            if SumElmnt(Nilai(FirstElmnt(S))) > SumElmnt(Nilai(MVP(C, Tail(S)))):
-                return FirstElmnt(S)
+            if MaxElmnt(Nilai(FirstElmnt(S))) == HighScore:
+                return Konso(FirstElmnt(S), MhsNilaiTertinggi(C, Tail(S), HighScore))
             else:
-                return MVP(C, Tail(S))
+                return MhsNilaiTertinggi(C, Tail(S), HighScore)
 
 
-def BanyakPemalas(S):
+def BanyakMhsEmptyQuiz(S):
     if IsEmpty(S):
         return 0
     else:
         if Nilai(FirstElmnt(S)) == []:
-            return 1 + BanyakPemalas(Tail(S))
+            return 1 + BanyakMhsEmptyQuiz(Tail(S))
         else:
-            return BanyakPemalas(Tail(S))
+            return BanyakMhsEmptyQuiz(Tail(S))
 
 
 def BanyakMhsLulus(S):
@@ -102,3 +148,6 @@ def BanyakMhsLulus(S):
             return 1 + BanyakMhsLulus(Tail(S))
         else:
             return BanyakMhsLulus(Tail(S))
+
+
+print(MhsNilaiTertinggi("A", mahasiswa, NilaiTertinggiPerKelas("A", mahasiswa)))
