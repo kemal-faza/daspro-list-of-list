@@ -3,17 +3,17 @@ from set_24060124120013 import *
 
 mahasiswa = [
     ["24060123130061", "Ananda Rachmawati Purwanto", "A", [90, 90, 90]],
-    # ["24060123130090", "Bramantyo Kunni Nurrisqi", "D", []],
-    # [
-    #     "24060123140152",
-    #     "Kayis Hilmi Farih",
-    #     "A",
-    #     [90, 70, 100],
-    # ],
-    # ["24060123140162", "Lalu Gilang Wirapati", "D", [100, 80, 90]],
-    # ["24060124120013", "Muhamad Kemal Faza", "D", [100, 90, 80]],
+    ["24060123130090", "Bramantyo Kunni Nurrisqi", "D", []],
+    [
+        "24060123140152",
+        "Kayis Hilmi Farih",
+        "A",
+        [90, 70, 100],
+    ],
+    ["24060123140162", "Lalu Gilang Wirapati", "D", [100, 80, 90]],
+    ["24060124120013", "Muhamad Kemal Faza", "D", [100, 90, 80]],
     ["24060124110142", "Muchammad Yuda Tri Ananda", "A", []],
-    # ["24060124120016", "Quinta Aurabiansyah", "D", [70, 60, 70]],
+    ["24060124120016", "Quinta Aurabiansyah", "D", [70, 60, 70]],
     ["24060124120018", "Putri Elizabeth Simanjuntak", "A", [70, 60, 60]],
 ]
 
@@ -31,28 +31,6 @@ def MakeSetMhs(mhs, L):
             return MakeSetMhs(mhs, Tail(L))
         else:
             return Konsi(mhs, L)
-
-
-# print(f"DATA AWAL MAHASISWA :")
-# print(
-#     MakeSet(
-#         [
-#             MakeMhs("24060123130061", "Ananda Rachmawati Purwanto", "A", [90, 90, 90]),
-#             MakeMhs("24060123130090", "Bramantyo Kunni Nurrisqi", "D", []),
-#             MakeMhs(
-#                 "24060123140152",
-#                 "Kayis Hilmi Farih",
-#                 "A",
-#                 [90, 70, 100],
-#             ),
-#             MakeMhs("24060123140162", "Lalu Gilang Wirapati", "D", [100, 80, 90]),
-#             MakeMhs("24060124120013", "Muhamad Kemal Faza", "D", [100, 90, 80]),
-#             MakeMhs("24060124110142", "Muchammad Yuda Tri Ananda", "A", []),
-#             MakeMhs("Quinta Aurabiansyah", "24060124120016", "D", [70, 60, 70]),
-#             MakeMhs("Putri Elizabeth Simanjuntak", "24060124120018", "A", [70, 60, 60]),
-#         ]
-#     ),
-# )
 
 
 # Selektor
@@ -94,18 +72,18 @@ def MhsEmptyQuiz(C, S):
 
 def NilaiTertinggiSemua(S):
     if IsOneElmnt(S):
-        return MaxElmnt(Nilai(FirstElmnt(S)))
+        return AvgElmnt(Nilai(FirstElmnt(S)))
     else:
         if IsEmpty(Nilai(FirstElmnt(S))):
             return NilaiTertinggiSemua(Tail(S))
         else:
-            return max2(MaxElmnt(Nilai(FirstElmnt(S))), NilaiTertinggiSemua(Tail(S)))
+            return max2(AvgElmnt(Nilai(FirstElmnt(S))), NilaiTertinggiSemua(Tail(S)))
 
 
 def NilaiTertinggiPerKelas(C, S):
     if IsOneElmnt(S):
         if not IsEmpty(Nilai(FirstElmnt(S))):
-            return MaxElmnt(Nilai(FirstElmnt(S)))
+            return AvgElmnt(Nilai(FirstElmnt(S)))
         else:
             return 0
     else:
@@ -113,7 +91,7 @@ def NilaiTertinggiPerKelas(C, S):
             return NilaiTertinggiPerKelas(C, Tail(S))
         else:
             return max2(
-                MaxElmnt(Nilai(FirstElmnt(S))), NilaiTertinggiPerKelas(C, Tail(S))
+                AvgElmnt(Nilai(FirstElmnt(S))), NilaiTertinggiPerKelas(C, Tail(S))
             )
 
 
@@ -124,7 +102,7 @@ def MhsNilaiTertinggi(C, S, HighScore):
         if IsEmpty(Nilai(FirstElmnt(S))) or C != Kelas(FirstElmnt(S)):
             return MhsNilaiTertinggi(C, Tail(S), HighScore)
         else:
-            if MaxElmnt(Nilai(FirstElmnt(S))) == HighScore:
+            if AvgElmnt(Nilai(FirstElmnt(S))) == HighScore:
                 return Konso(FirstElmnt(S), MhsNilaiTertinggi(C, Tail(S), HighScore))
             else:
                 return MhsNilaiTertinggi(C, Tail(S), HighScore)
@@ -150,4 +128,11 @@ def BanyakMhsLulus(S):
             return BanyakMhsLulus(Tail(S))
 
 
+# Aplikasi
+print(MhsLulus(mahasiswa))
+print(MhsEmptyQuiz("A", mahasiswa))
+print(NilaiTertinggiSemua(mahasiswa))
+print(NilaiTertinggiPerKelas("A", mahasiswa))
+print(BanyakMhsEmptyQuiz(mahasiswa))
+print(BanyakMhsLulus(mahasiswa))
 print(MhsNilaiTertinggi("A", mahasiswa, NilaiTertinggiPerKelas("A", mahasiswa)))
