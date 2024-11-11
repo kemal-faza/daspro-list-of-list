@@ -1,35 +1,6 @@
 from list_24060124120013 import *
 
 
-# DEFINISI DAN SPESIFIKASI OPERASI LIST YANG DIPERLUKAN UNTUK HIMPUNAN
-# Rember: elemen, list -> list
-# Rember(x,L) menghapus sebuah elemen x dari list L
-#   Jika x ada di list L, maka elemen L berkurang 1.
-#   Jika x tidak ada di list L maka L tetap. List kosong tetap menjadi list kosong.
-def Rember(x, L):
-    if IsEmpty(L):
-        return []
-    else:
-        if FirstElmnt(L) == x:
-            return Tail(L)
-        else:
-            return Konso(FirstElmnt(L), Rember(x, Tail(L)))
-
-
-# MultiRember: elemen, list -> list
-# MultiRember(x,L) menghapus semua kemunculan elemen x dari list L.
-#   List baru yang dihasilkan tidak lagi memiliki elemen x.
-#   List kosong tetap menjadi list kosong.
-def MultiRember(x, L):
-    if IsEmpty(L):
-        return []
-    else:
-        if FirstElmnt(L) == x:
-            return MultiRember(x, Tail(L))
-        else:
-            return Konso(FirstElmnt(L), MultiRember(x, Tail(L)))
-
-
 # DEFINISI DAN SPESIKASI KONSTRUKTOR SET DARI LIST
 # MakeSet: list -> set
 # MakeSet(L) membuat set dari list L dengan menghapus semua kemunculan lebih dari satu kali yang menggunakan fungsi IsMember(x, L)
@@ -63,6 +34,49 @@ def KonsoSet(e, H):
         return Konso(e, H)
     else:
         return H
+
+
+# DEFINISI DAN SPESIFIKASI OPERASI LIST YANG DIPERLUKAN UNTUK HIMPUNAN
+# Rember: elemen, list -> list
+# Rember(x,L) menghapus sebuah elemen x yang pertama kali ditemui dari list L
+#   Jika x ada di list L, maka elemen L berkurang 1.
+#   Jika x tidak ada di list L maka L tetap. List kosong tetap menjadi list kosong.
+def Rember(x, L):
+    if IsEmpty(L):
+        return []
+    else:
+        if FirstElmnt(L) == x:
+            return Tail(L)
+        else:
+            return Konso(FirstElmnt(L), Rember(x, Tail(L)))
+
+
+# Rember2: elemen, list -> list
+# Rember2(x,L) menghapus sebuah elemen x yang terakhir kali ditemui dari list L
+#   Jika x ada di list L, maka elemen L berkurang 1.
+#   Jika x tidak ada di list L maka L tetap. List kosong tetap menjadi list kosong.
+def Rember2(x, L):
+    if IsEmpty(L):
+        return []
+    else:
+        if LastElmnt(L) == x:
+            return Head(L)
+        else:
+            return Konsi(LastElmnt(L), Rember2(x, Head(L)))
+
+
+# MultiRember: elemen, list -> list
+# MultiRember(x,L) menghapus semua kemunculan elemen x dari list L.
+#   List baru yang dihasilkan tidak lagi memiliki elemen x.
+#   List kosong tetap menjadi list kosong.
+def MultiRember(x, L):
+    if IsEmpty(L):
+        return []
+    else:
+        if FirstElmnt(L) == x:
+            return MultiRember(x, Tail(L))
+        else:
+            return Konso(FirstElmnt(L), MultiRember(x, Tail(L)))
 
 
 # DEFINISI DAN SPESIFIKASI PREDIKAT
@@ -189,8 +203,6 @@ def NBIntersect(H1, H2):
 # NBUnion: 2 set -> integer
 # NBUnion(H1,H2) menghasilkan jumlah elemen hasil gabungan antara H1 dan H2
 #   tanpa memanfaatkan fungsi MakeUnion(H1,H2).
-
-
 def NBUnion(H1, H2):
     if IsEmpty(H1):
         return NBElmnt(H2)
